@@ -1,5 +1,6 @@
 package br.com.macario.fran.estacionamento.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,9 @@ public class EstacionamentoDTO {
     private String estado;
     private String modelo;
     private String cor;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataDeEntrada;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataDeSaida;
     private Double conta;
 

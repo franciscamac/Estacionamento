@@ -1,15 +1,15 @@
 package br.com.macario.fran.estacionamento.controller;
 
+import br.com.macario.fran.estacionamento.controller.dto.EstacionamentoCreateDTO;
 import br.com.macario.fran.estacionamento.controller.dto.EstacionamentoDTO;
 import br.com.macario.fran.estacionamento.controller.mapper.EstacionamentoMapper;
 import br.com.macario.fran.estacionamento.model.Estacionamento;
 import br.com.macario.fran.estacionamento.service.EstacionamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -25,9 +25,23 @@ public class EstacionamentoController {
     }
 
     @GetMapping
-    public List<EstacionamentoDTO> findAll(){
+    public ResponseEntity<List<EstacionamentoDTO>> findAll(){
         List<Estacionamento> estacionamentoList = estacionamentoService.findAll();
         List<EstacionamentoDTO> result = estacionamentoMapper.toEstacionamentoList(estacionamentoList);
-        return result;
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EstacionamentoDTO> findById(@PathVariable String id){
+        Estacionamento estacionamento = estacionamentoService.findById(id);
+        EstacionamentoDTO result = estacionamentoMapper.toEstacionamentoDTO(estacionamento);
+        return ResponseEntity.ok(result);
+    }
+    @PostMapping
+    public ResponseEntity<EstacionamentoDTO> create(@RequestBody EstacionamentoCreateDTO dto){
+        var estacionamentoCreate = estacionamentoMapper.toEstacionamentoCreate(dto);
+        var estacionamento = estacionamentoService.create(estacionamentoCreate);
+        var result = estacionamentoMapper.toEstacionamentoDTO(estacionamento);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }
